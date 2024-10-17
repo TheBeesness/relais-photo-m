@@ -5,14 +5,14 @@ let errorMessage = '';
 try {
     const res = await fetch('https://script.google.com/macros/s/AKfycbyaJqHYS3skNc7ZEDUXHAGVP6w22dMzB5d7wykRfK9ROeFXjpuyLSqDA2jnPBG3v-5P/exec');
     if (!res.ok) {
-        throw new Error('Network response was not ok');
+        throw new Error('Erreure de réseau.');
     }
     const { data } = await res.json();
     lookupData = data.reduce((acc: { [x: string]: any; }, item: { key: string | number; }) => {
         acc[item.key] = item;
+        console.info('Got ', item);
         return acc;
     }, {});
-    console.info('Got ', lookupData); // TODO: remove this
 } catch (error) {
     errorMessage = 'Erreure avec le serveur distant. Veuillez réessayer ou contacter info@josiannelapierre.com';
     console.error('Error fetching data:', error);
