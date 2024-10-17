@@ -8,9 +8,9 @@ try {
         throw new Error('Erreure de réseau.');
     }
     const { data } = await res.json();
+    console.info('Got ', data);
     lookupData = data.reduce((acc: { [x: string]: any; }, item: { key: string | number; }) => {
         acc[item.key] = item;
-        console.info('Got ', item);
         return acc;
     }, {});
 } catch (error) {
