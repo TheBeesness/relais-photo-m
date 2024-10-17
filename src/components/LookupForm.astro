@@ -8,7 +8,6 @@ try {
         throw new Error('Erreure de réseau.');
     }
     const { data } = await res.json();
-    console.info('Got ', data);
     lookupData = data.reduce((acc: { [x: string]: any; }, item: { key: string | number; }) => {
         acc[item.key] = item;
         return acc;
@@ -116,7 +115,7 @@ try {
     const form = document.getElementById('lookupForm');
     const input = document.getElementById('searchInput');
     const resultDiv = document.getElementById('result');
-
+    
     form?.addEventListener('submit', (e) => {
         e.preventDefault();
         const searchTerm = input instanceof HTMLInputElement ? input.value : '';
