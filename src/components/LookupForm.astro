@@ -12,6 +12,7 @@ try {
         acc[item.key] = item;
         return acc;
     }, {});
+    console.debug('Got ', lookupData); // TODO: remove this
 } catch (error) {
     errorMessage = 'Erreure avec le serveur distant. Veuillez réessayer ou contacter info@josiannelapierre.com';
     console.error('Error fetching data:', error);
