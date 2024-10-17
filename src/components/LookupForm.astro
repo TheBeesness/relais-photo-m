@@ -13,7 +13,7 @@ try {
         return acc;
     }, {});
 } catch (error) {
-    errorMessage = 'Failed to fetch data. Please try again later.';
+    errorMessage = 'Erreure avec le serveur distant. Veuillez réessayer ou contacter info@josiannelapierre.com';
     console.error('Error fetching data:', error);
 }
 ---
@@ -22,19 +22,19 @@ try {
     {errorMessage && <div class="error-message">{errorMessage}</div>}
     <form id="lookupForm" class="lookup-form">
         <div class="form-group">
-            <label for="searchInput" class="form-label">Enter key:</label>
+            <label for="searchInput" class="form-label">Entrez votre clé:</label>
             <input
                 type="text"
                 id="searchInput"
                 class="form-input"
-                placeholder="key..."
+                placeholder=""
             />
         </div>
         <button
             type="submit"
             class="form-button"
         >
-            Look Up Code
+            Recevoir mon code
         </button>
         <div id="result" class="result hidden"></div>
     </form>
@@ -132,7 +132,7 @@ try {
             } else {
                 resultDiv.innerHTML = `
                     <div class="bg-red-50 text-red-700 p-4">
-                        No code found for the key "${searchTerm}"
+                        Aucun code existant pour cette clé "${searchTerm}"
                     </div>
                 `;
             }
