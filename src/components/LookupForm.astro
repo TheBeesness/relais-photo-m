@@ -1,0 +1,142 @@
+---
+let lookupData = {};
+let errorMessage = '';
+
+try {
+    const res = await fetch('https://script.google.com/macros/s/AKfycbyaJqHYS3skNc7ZEDUXHAGVP6w22dMzB5d7wykRfK9ROeFXjpuyLSqDA2jnPBG3v-5P/exec');
+    if (!res.ok) {
+        throw new Error('Network response was not ok');
+    }
+    const { data } = await res.json();
+    lookupData = data.reduce((acc: { [x: string]: any; }, item: { key: string | number; }) => {
+        acc[item.key] = item;
+        return acc;
+    }, {});
+} catch (error) {
+    errorMessage = 'Failed to fetch data. Please try again later.';
+    console.error('Error fetching data:', error);
+}
+---
+
+<div class="lookup-form-container">
+    {errorMessage && <div class="error-message">{errorMessage}</div>}
+    <form id="lookupForm" class="lookup-form">
+        <div class="form-group">
+            <label for="searchInput" class="form-label">Enter key:</label>
+            <input
+                type="text"
+                id="searchInput"
+                class="form-input"
+                placeholder="key..."
+            />
+        </div>
+        <button
+            type="submit"
+            class="form-button"
+        >
+            Look Up Code
+        </button>
+        <div id="result" class="result hidden"></div>
+    </form>
+</div>
+
+<style>
+    .lookup-form-container {
+        background: #fff;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        padding: 2rem;
+    }
+
+    .error-message {
+        background-color: #f8d7da;
+        color: #721c24;
+        padding: 1rem;
+        border-radius: 5px;
+        margin-bottom: 1rem;
+    }
+
+    .lookup-form {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .form-group {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .form-label {
+        margin-bottom: 0.5rem;
+        font-weight: bold;
+        color: #333;
+    }
+
+    .form-input {
+        padding: 0.8rem;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 16px;
+        transition: border-color 0.2s;
+    }
+
+    .form-input:focus {
+        border-color: #6a11cb;
+        outline: none;
+    }
+
+    .form-button {
+        background-color: #6a11cb;
+        color: white;
+        padding: 0.8rem;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.2s;
+    }
+
+    .form-button:hover {
+        background-color: #2575fc;
+    }
+
+    .result {
+        margin-top: 1rem;
+        padding: 1rem;
+        border-radius: 5px;
+    }
+
+    .hidden {
+        display: none;
+    }
+</style>
+
+<script define:vars={{ lookupData }}>
+    const form = document.getElementById('lookupForm');
+    const input = document.getElementById('searchInput');
+    const resultDiv = document.getElementById('result');
+
+    form?.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const searchTerm = input instanceof HTMLInputElement ? input.value : '';
+        const result = lookupData[searchTerm];
+
+        if (resultDiv) {
+            if (result) {
+                resultDiv.innerHTML = `
+                    <div class="bg-green-50 text-green-700 p-4">
+                        <h4 class="font-semibold mb-2">${result.key}</h4>
+                        <p><strong>Code:</strong> ${result.code}</p>
+                    </div>
+                `;
+            } else {
+                resultDiv.innerHTML = `
+                    <div class="bg-red-50 text-red-700 p-4">
+                        No code found for the key "${searchTerm}"
+                    </div>
+                `;
+            }
+            resultDiv.classList.remove('hidden');
+        }
+    });
+</script>
