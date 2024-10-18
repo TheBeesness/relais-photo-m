@@ -3,6 +3,5 @@ import { defineConfig } from 'astro/config';
 
 // https://astro.build/config
 export default defineConfig({
-    site: 'https://TheBeesness.github.io',
-    base: 'relais-photo',
+    site: 'https://josiannelapierre.com',
 });
