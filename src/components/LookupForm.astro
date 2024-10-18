@@ -8,14 +8,16 @@ try {
         throw new Error('Erreure de réseau.');
     }
     const { data } = await res.json();
+    console.log('Raw data received:', data);
     lookupData = data.reduce((acc: { [x: string]: any; }, item: { key: string | number; }) => {
         acc[item.key] = item;
         return acc;
     }, {});
-} catch (error) {
-    errorMessage = 'Erreure avec le serveur distant. Veuillez réessayer ou contacter info@josiannelapierre.com';
-    console.error('Error fetching data:', error);
-}
+    console.log('Processed lookup data:', lookupData); 
+    } catch (error) {
+        errorMessage = 'Erreure avec le serveur distant. Veuillez réessayer ou contacter info@josiannelapierre.com';
+        console.error('Error fetching data:', error);
+    }
 ---
 
 <div class="lookup-form-container">
@@ -119,7 +121,10 @@ try {
     form?.addEventListener('submit', (e) => {
         e.preventDefault();
         const searchTerm = input instanceof HTMLInputElement ? input.value : '';
+        console.log('Search term:', searchTerm); 
+        console.log('Available lookup data:', lookupData);
         const result = lookupData[searchTerm];
+        console.log('Search result:', result);
 
         if (resultDiv) {
             if (result) {
