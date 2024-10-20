@@ -1,0 +1,190 @@
+---
+let lookupData = {};
+let errorMessage = '';
+
+try {
+    const res = await fetch('https://script.google.com/macros/s/AKfycbyaJqHYS3skNc7ZEDUXHAGVP6w22dMzB5d7wykRfK9ROeFXjpuyLSqDA2jnPBG3v-5P/exec');
+    if (!res.ok) {
+        throw new Error('Erreure de réseau.');
+    }
+    const { data } = await res.json();
+    lookupData = data.reduce((acc: { [x: string]: any; }, item: { key: string | number; }) => {
+        acc[item.key] = item;
+        return acc;
+    }, {});
+} catch (error) {
+    errorMessage = 'Erreure avec le serveur distant. Veuillez réessayer ou contacter info@josiannelapierre.com';
+    console.error('Error fetching data:', error);
+}
+---
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gab Lookup</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 1rem;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: transparent;
+        }
+
+        .lookup-form-container {
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .error-message {
+            background-color: #f8d7da;
+            color: #721c24;
+            padding: 1rem;
+            border-radius: 5px;
+            margin-bottom: 1rem;
+        }
+
+        .lookup-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-label {
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .form-input {
+            padding: 0.8rem;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: border-color 0.2s;
+        }
+
+        .form-input:focus {
+            border-color: #6a11cb;
+            outline: none;
+        }
+
+        .form-button {
+            background-color: #6a11cb;
+            color: white;
+            padding: 0.8rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            font-size: 16px;
+        }
+
+        .form-button:hover {
+            background-color: #2575fc;
+        }
+
+        .result {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 5px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .bg-green-50 {
+            background-color: #f0fdf4;
+            padding: 1rem;
+            border-radius: 5px;
+        }
+
+        .bg-red-50 {
+            background-color: #fef2f2;
+            padding: 1rem;
+            border-radius: 5px;
+        }
+
+        .text-green-700 {
+            color: #15803d;
+        }
+
+        .text-red-700 {
+            color: #b91c1c;
+        }
+
+        .instructions {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="instructions">
+        <p>Entrez votre clé pour recevoir votre code.</p>
+    </div>
+    
+    <div class="lookup-form-container">
+        {errorMessage && <div class="error-message">{errorMessage}</div>}
+        <form id="lookupForm" class="lookup-form">
+            <div class="form-group">
+                <label for="searchInput" class="form-label">Entrez votre clé:</label>
+                <input
+                    type="text"
+                    id="searchInput"
+                    class="form-input"
+                    placeholder=""
+                />
+            </div>
+            <button
+                type="submit"
+                class="form-button"
+            >
+                Recevoir mon code
+            </button>
+            <div id="result" class="result hidden"></div>
+        </form>
+    </div>
+
+    <script define:vars={{ lookupData }}>
+        const form = document.getElementById('lookupForm');
+        const input = document.getElementById('searchInput');
+        const resultDiv = document.getElementById('result');
+        
+        form?.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const searchTerm = input instanceof HTMLInputElement ? input.value : '';
+            const result = lookupData[searchTerm];
+
+            if (resultDiv) {
+                if (result) {
+                    resultDiv.innerHTML = `
+                        <div class="bg-green-50 text-green-700">
+                            <h4 style="margin: 0 0 0.5rem 0">${result.key}</h4>
+                            <p style="margin: 0"><strong>Code:</strong> ${result.code}</p>
+                        </div>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `
+                        <div class="bg-red-50 text-red-700">
+                            Aucun code existant pour cette clé "${searchTerm}"
+                        </div>
+                    `;
+                }
+                resultDiv.classList.remove('hidden');
+            }
+        });
+    </script>
+</body>
+</html>
