@@ -132,14 +132,14 @@ try {
 </head>
 <body>
     <div class="instructions">
-        <p>Entrez votre clé pour recevoir votre code.</p>
+        <p>Entrez votre courriel pour recevoir votre code.</p>
     </div>
     
     <div class="lookup-form-container">
         {errorMessage && <div class="error-message">{errorMessage}</div>}
         <form id="lookupForm" class="lookup-form">
             <div class="form-group">
-                <label for="searchInput" class="form-label">Entrez votre clé:</label>
+                <label for="searchInput" class="form-label">Entrez votre courriel:</label>
                 <input
                     type="text"
                     id="searchInput"
@@ -178,7 +178,7 @@ try {
                 } else {
                     resultDiv.innerHTML = `
                         <div class="bg-red-50 text-red-700">
-                            Aucun code existant pour cette clé "${searchTerm}"
+                            Aucun code existant pour ce email "${searchTerm}"
                         </div>
                     `;
                 }
