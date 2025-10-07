@@ -3,7 +3,7 @@ let lookupData = {};
 let errorMessage = '';
 
 try {
-    const res = await fetch('https://script.google.com/macros/s/AKfycby6w4ZNblPEUnhv2twxhE_eBk0vcURGJY485_A4R8V6RAJWcQSbJucdMTMaW9t8tTt_/exec');
+    const res = await fetch('https://script.google.com/macros/s/AKfycbxRHApJxHACO-eSHDNHYHqOmOV60ka9YqHHOywficA29M7bAOk2vOrshfZFcTli6bU7/exec');
     if (!res.ok) {
         throw new Error('Erreure de réseau.');
     }
@@ -13,7 +13,7 @@ try {
         return acc;
     }, {});
 } catch (error) {
-    errorMessage = 'Erreure avec le serveur distant. Veuillez réessayer ou contacter info@josiannelapierre.com';
+    errorMessage = 'Erreure avec le serveur distant. Veuillez réessayer ou contacter info@myriamtphotographe.com';
     console.error('Error fetching data:', error);
 }
 ---
